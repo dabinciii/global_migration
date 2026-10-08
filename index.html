@@ -56,7 +56,7 @@ h1 { font-size: clamp(58px, 8.4vw, 132px); }
 h1 em, h2 em { color: var(--accent); font-style: normal; }
 .hero__lead { margin: 34px 0 0; font-size: clamp(17px, 1.5vw, 22px); line-height: 1.65; color: var(--muted); }
 .hero__stat { display: grid; grid-template-columns: auto auto; column-gap: 0; align-items: baseline; margin-top: 62px; }
-.hero__number { font: 600 clamp(42px, 5.1vw, 76px)/.95 var(--font-number); letter-spacing: -.05em; font-variant-numeric: tabular-nums; }
+.hero__number { font: 600 clamp(28px, 3.34vw, 48px)/.95 var(--font-number); letter-spacing: -.05em; font-variant-numeric: tabular-nums; }
 .hero__unit { font-size: 18px; font-weight: 600; margin-left: -1px; }
  .hero__caption { grid-column: 1 / -1; grid-row: 1; margin: 0 0 10px; color: var(--muted); font-size: 13px; }
 .hero__number, .hero__unit { grid-row: 2; }
@@ -479,8 +479,42 @@ footer.site-footer .site-footer__head .site-footer__note{max-width:760px;margin-
 .hero__lead strong{color:var(--text);font-weight:700}
 
 /* 히어로 제목 크기 (기존 최대 132px → 108px) */
-.hero h1{font-size:clamp(46px,6.9vw,108px);word-break:keep-all}
-@media (max-width:800px){.hero h1{font-size:clamp(30px,9vw,58px)}}
+.hero h1{font-size:clamp(44px,5.4vw,82px);word-break:keep-all} /* 다른 섹션 h2와 같은 크기 */
+.hero h1 em{white-space:nowrap}
+/* 히어로 오른쪽: 이주 흐름 라인 그래픽 */
+.hero::before,.hero::after{display:none}
+.hero-flows{position:absolute;z-index:0;right:2.5vw;top:50%;width:min(41vw,660px);height:auto;transform:translateY(-50%);overflow:visible;pointer-events:none}
+.flow-line{fill:none;stroke:var(--text);stroke-width:2;stroke-linecap:round;opacity:.13;stroke-dasharray:1600;stroke-dashoffset:1600;animation:flowDraw 2.6s var(--ease-smooth) var(--d,0s) forwards}
+.flow-line--accent{stroke:var(--accent);stroke-width:2.4;opacity:.75}
+.flow-line--yellow{stroke:#e5d90f;stroke-width:2.4;opacity:1}
+.flow-line--light{stroke-width:2;opacity:.2}
+.flow-points circle.light:not(.accent){--o:.25}
+.flow-movers circle.light{opacity:.3}
+.flow-line--faint{stroke-width:1.5;opacity:.24}
+.flow-head{opacity:0;animation:flowFade .6s ease 2.4s forwards}
+.flow-points circle{fill:var(--text);opacity:0;animation:flowFade .6s ease 1.8s forwards}
+.flow-points circle.hollow{fill:none;stroke:var(--text);stroke-width:1.3}
+.flow-points circle.accent{fill:var(--accent)}
+.flow-points circle.yellow{fill:#e5d90f}
+.flow-points circle.hollow.accent{fill:none;stroke:var(--accent)}
+.flow-points circle:not(.accent){--o:.16}
+.flow-movers circle{fill:var(--text);opacity:.2}
+.flow-movers circle.accent{fill:var(--accent);opacity:.9}
+@keyframes flowDraw{to{stroke-dashoffset:0}}
+@keyframes flowFade{to{opacity:var(--o,1)}}
+@media (max-width:800px){.hero-flows{width:72vw;right:-6vw;top:auto;bottom:11%;transform:none;opacity:.6}}
+@media (prefers-reduced-motion:reduce){.flow-line{animation:none;stroke-dashoffset:0}.flow-head,.flow-points circle{animation:none;opacity:var(--o,1)}.flow-movers{display:none}}
+
+/* SCROLL TO EXPLORE: 노란 알약 버튼 */
+.scroll-cue{gap:10px;padding:11px 12px 11px 20px;border-radius:999px;background:var(--accent-2);color:var(--text);transition:filter var(--dur-fast) var(--ease-standard),transform var(--dur-fast) var(--ease-standard)}
+.scroll-cue:hover{filter:brightness(.96);transform:translateY(-1px)}
+.scroll-cue .scroll-cue__arrow{width:20px;height:20px;background:transparent;font-size:14px}
+
+/* 히어로 숫자: 본문 검정보다 살짝 밝게 */
+.hero__number,.hero__unit{color:#474747}
+
+/* 메인 헤딩 통일: 크기(1440px 화면에서 78px), 줄간격 110% */
+.hero h1,.map-section h2,.ranking-section h2,.scatter-section .scatter-intro h2,.parallel-section .parallel-intro h2{font-size:clamp(44px,5.4vw,82px);line-height:1.1}
 
 /* ---------- Requested visual refinements ---------- */
 .hero__stat{column-gap:0;justify-content:start}
@@ -578,8 +612,34 @@ footer.site-footer .site-footer__head .site-footer__note{max-width:760px;margin-
   </nav>
   <main>
     <section class="hero" id="hero" aria-labelledby="hero-title">
+      <svg class="hero-flows" viewBox="0 0 700 700" aria-hidden="true" focusable="false">
+        <defs>
+          <marker id="flow-head" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+            <path class="flow-head" d="M1 1.5 L10 6 L1 10.5" fill="none" stroke="context-stroke" stroke-opacity="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+        </defs>
+        <!-- 위쪽: 작은 고리를 그리며 오른쪽으로 -->
+        <path class="flow-line" style="--d:0s" id="flow-c" marker-end="url(#flow-head)"
+          d="M215 165 C300 90 470 85 525 150 C580 215 505 275 440 245 C375 215 445 120 610 105"/>
+        <!-- 가운데: 크게 휘감으며 오른쪽 위로 -->
+        <path class="flow-line" style="--d:.35s" id="flow-a" marker-end="url(#flow-head)"
+          d="M70 430 C40 310 220 230 360 285 S575 425 480 475 S250 440 330 335 S540 185 640 205"/>
+        <!-- 아래쪽: 길게 돌아 오른쪽으로 -->
+        <path class="flow-line" style="--d:.7s" id="flow-b" marker-end="url(#flow-head)"
+          d="M110 575 C260 615 520 575 560 480 C600 385 470 345 420 405 C370 465 520 565 665 520"/>
+        <!-- 출발점(점)과 도착점(빈 원) -->
+        <g class="flow-points">
+          <circle cx="215" cy="165" r="4.5"/><circle cx="70" cy="430" r="4.5"/><circle cx="110" cy="575" r="4.5"/>
+          <circle class="hollow" cx="632" cy="100" r="6"/><circle class="hollow" cx="662" cy="196" r="6"/><circle class="hollow" cx="684" cy="527" r="6"/>
+        </g>
+        <!-- 경로를 따라 천천히 흐르는 점 -->
+        <g class="flow-movers">
+          <circle r="3.2"><animateMotion dur="9s" begin="2.2s" repeatCount="indefinite"><mpath href="#flow-a"/></animateMotion></circle>
+          <circle r="3.2"><animateMotion dur="11s" begin="3s" repeatCount="indefinite"><mpath href="#flow-b"/></animateMotion></circle>
+        </g>
+      </svg>
       <div class="hero__inner">
-        <h1 id="hero-title">사람들은<br><em>어느 나라에서</em><br>새 삶을 시작하는가</h1>
+        <h1 id="hero-title">이주민들은 <em>어느 나라에서</em><br>새 삶을 시작하는가</h1>
         <p class="hero__lead">세계인 <strong>27명 중 1명</strong>은 태어난 나라 밖에서 살고 있습니다.<br>그들의 규모와 방향을 데이터로 따라가 봅니다.</p>
         <div class="hero__stat" aria-label="2024년 전 세계 국제 이주자 총수">
           <span class="hero__caption">2024년 전 세계 국제 이주자</span>
@@ -786,11 +846,6 @@ footer.site-footer .site-footer__head .site-footer__note{max-width:760px;margin-
       <div class="site-footer__method">
         <strong>중요한 주석</strong>
         <p>‘출신국 데이터’는 특정 기간에 국경을 넘은 <b>이동량(flow)</b>이 아니라, 기준 시점에 해외에 거주하고 있는 사람의 규모인 <b>해외 거주자 수(stock)</b>입니다. 따라서 ‘누가 가장 많이 떠나나?’의 수치는 해당 국가 출신자가 현재 해외에 얼마나 거주하는지를 보여줍니다.</p>
-      </div>
-      <div class="site-footer__local">
-        <span>LOCAL PREVIEW</span>
-        <code>python3 -m http.server 8000</code>
-        <span>→ 브라우저에서 <code>http://localhost:8000</code> 접속</span>
       </div>
       <div class="site-footer__bottom"><span>GLOBAL MIGRATION · DATA VISUALIZATION</span><a href="#hero">BACK TO TOP ↑</a></div>
     </footer>
